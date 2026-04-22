@@ -95,7 +95,7 @@
   transition: border-color var(--dur-base) var(--ease);
 }
 .search-bar__select:focus { border-color: var(--color-primary); }
-.search-bar__select option { background: var(--color-bg-alt); }
+.search-bar__select option { background: #1a1a2e; color: #e8eaf6; }
 
 .search-info {
   margin-top: var(--sp-2);
