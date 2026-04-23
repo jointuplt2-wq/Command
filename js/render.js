@@ -70,24 +70,8 @@ const Render = (() => {
     }
   }
 
-  function populateCategorySelects(categories) {
-    const selects = ['category-filter', 'form-category'];
-    selects.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const current = el.value;
-      const isFilter = id === 'category-filter';
-      el.innerHTML = isFilter
-        ? '<option value="">전체 카테고리</option>'
-        : '<option value="">선택 없음</option>';
-      categories.forEach(cat => {
-        const opt = document.createElement('option');
-        opt.value = cat;
-        opt.textContent = cat;
-        el.appendChild(opt);
-      });
-      if (current) el.value = current;
-    });
+  function populateCategorySelects(_categories) {
+    // 커스텀 드롭다운으로 대체 — main.js의 refreshCategories()에서 처리
   }
 
   function formatDate(iso) { return _formatDate(iso); }

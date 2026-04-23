@@ -82,20 +82,7 @@
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-dim);
 }
-.search-bar__select {
-  padding: var(--sp-3) var(--sp-4);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--color-border);
-  border-radius: var(--r-lg);
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  min-width: 150px;
-  cursor: pointer;
-  transition: border-color var(--dur-base) var(--ease);
-}
-.search-bar__select:focus { border-color: var(--color-primary); }
-.search-bar__select option { background: #1a1a2e; color: #e8eaf6; }
+/* (custom-select로 대체됨) */
 
 .search-info {
   margin-top: var(--sp-2);

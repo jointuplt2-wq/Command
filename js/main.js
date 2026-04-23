@@ -1,7 +1,6 @@
 /* ── Toast ── */
 const Toast = (() => {
   const container = document.getElementById('toast-container');
-
   function show(msg, type = 'info') {
     const el = document.createElement('div');
     el.className = `toast toast--${type}`;
@@ -12,41 +11,38 @@ const Toast = (() => {
       el.addEventListener('animationend', () => el.remove());
     }, 2800);
   }
-
   return { show };
 })();
 
 /* ── App ── */
 window.App = (() => {
-  /* state */
   let _deleteTargetId = null;
 
   /* ── Refs ── */
-  const formBackdrop   = document.getElementById('form-backdrop');
-  const formTitle      = document.getElementById('form-modal-title');
-  const itemForm       = document.getElementById('item-form');
-  const formId         = document.getElementById('form-id');
-  const formName       = document.getElementById('form-name');
-  const formCategory   = document.getElementById('form-category');
-  const formDesc       = document.getElementById('form-desc');
-  const formTags       = document.getElementById('form-tags');
-  const errorName      = document.getElementById('error-name');
+  const formBackdrop    = document.getElementById('form-backdrop');
+  const formTitle       = document.getElementById('form-modal-title');
+  const itemForm        = document.getElementById('item-form');
+  const formId          = document.getElementById('form-id');
+  const formName        = document.getElementById('form-name');
+  const formDesc        = document.getElementById('form-desc');
+  const formTags        = document.getElementById('form-tags');
+  const errorName       = document.getElementById('error-name');
 
-  const detailBackdrop = document.getElementById('detail-backdrop');
-  const detailTitle    = document.getElementById('detail-modal-title');
-  const detailCat      = document.getElementById('detail-category');
-  const detailDesc     = document.getElementById('detail-desc');
-  const detailTags     = document.getElementById('detail-tags');
-  const detailMeta     = document.getElementById('detail-meta');
-  const detailEditBtn  = document.getElementById('detail-edit');
-  const detailDeleteBtn= document.getElementById('detail-delete');
+  const detailBackdrop  = document.getElementById('detail-backdrop');
+  const detailTitle     = document.getElementById('detail-modal-title');
+  const detailCat       = document.getElementById('detail-category');
+  const detailDesc      = document.getElementById('detail-desc');
+  const detailTags      = document.getElementById('detail-tags');
+  const detailMeta      = document.getElementById('detail-meta');
+  const detailEditBtn   = document.getElementById('detail-edit');
+  const detailDeleteBtn = document.getElementById('detail-delete');
 
-  const confirmBackdrop= document.getElementById('confirm-backdrop');
+  const confirmBackdrop = document.getElementById('confirm-backdrop');
+  const searchInput     = document.getElementById('search-input');
+  const importFileInput = document.getElementById('import-file');
 
-  const searchInput    = document.getElementById('search-input');
-  const categoryFilter = document.getElementById('category-filter');
-
-  const importFileInput= document.getElementById('import-file');
+  /* ── 커스텀 드롭다운 인스턴스 ── */
+  let filterSelect, formCatSelect;
 
   /* ── Core Refresh ── */
   function refresh() {
@@ -55,9 +51,15 @@ window.App = (() => {
     Render.renderList(filtered, all.length);
   }
 
-  /* ── Category ── */
+  /* ── Category 옵션 동기화 ── */
   function refreshCategories() {
-    Render.populateCategorySelects(Storage.getCategories());
+    const cats = Storage.getCategories();
+
+    const filterOpts = [{ value: '', text: '전체 카테고리' }, ...cats.map(c => ({ value: c, text: c }))];
+    filterSelect.setOptions(filterOpts);
+
+    const formOpts = [{ value: '', text: '선택 없음' }, ...cats.map(c => ({ value: c, text: c }))];
+    formCatSelect.setOptions(formOpts);
   }
 
   /* ── Form Modal ── */
@@ -68,6 +70,7 @@ window.App = (() => {
     formName.classList.remove('error');
     formTitle.textContent = '새 항목 추가';
     refreshCategories();
+    formCatSelect.reset();
     setModalVisible(formBackdrop, true);
     setTimeout(() => formName.focus(), 100);
   }
@@ -83,7 +86,7 @@ window.App = (() => {
     formName.classList.remove('error');
     formTitle.textContent = '항목 수정';
     refreshCategories();
-    formCategory.value = item.category || '';
+    formCatSelect.setValue(item.category || '');
     closeDetail();
     setModalVisible(formBackdrop, true);
     setTimeout(() => formName.focus(), 100);
@@ -103,15 +106,11 @@ window.App = (() => {
     errorName.textContent = '';
     formName.classList.remove('error');
 
-    const tags = formTags.value
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean);
-
+    const tags = formTags.value.split(',').map(t => t.trim()).filter(Boolean);
     const data = {
       id: formId.value ? Number(formId.value) : undefined,
       name,
-      category: formCategory.value,
+      category: formCatSelect.getValue(),
       description: formDesc.value.trim(),
       tags,
     };
@@ -144,12 +143,10 @@ window.App = (() => {
     _deleteTargetId = id;
     setModalVisible(confirmBackdrop, true);
   }
-
   function closeConfirm() {
     _deleteTargetId = null;
     setModalVisible(confirmBackdrop, false);
   }
-
   function handleDeleteConfirm() {
     if (!_deleteTargetId) return;
     Storage.deleteItem(_deleteTargetId);
@@ -165,31 +162,23 @@ window.App = (() => {
     document.body.style.overflow = visible ? 'hidden' : '';
   }
 
+  function handleBackdropClick(backdrop, closeFn) {
+    backdrop.addEventListener('click', e => { if (e.target === backdrop) closeFn(); });
+  }
+
   /* ── Add Category ── */
   function promptAddCategory() {
     const name = window.prompt('새 카테고리 이름을 입력하세요:')?.trim();
     if (!name) return;
     Storage.addCategory(name);
     refreshCategories();
-    formCategory.value = name;
+    formCatSelect.setValue(name);
   }
 
   /* ── Search & Filter ── */
   function handleSearch() {
     Search.setKeyword(searchInput.value);
     refresh();
-  }
-
-  function handleCategoryFilter() {
-    Search.setCategory(categoryFilter.value);
-    refresh();
-  }
-
-  /* ── Backdrop click to close ── */
-  function handleBackdropClick(backdrop, closeFn) {
-    backdrop.addEventListener('click', e => {
-      if (e.target === backdrop) closeFn();
-    });
   }
 
   /* ── Keyboard ── */
@@ -204,6 +193,28 @@ window.App = (() => {
   /* ── Init ── */
   function init() {
     Theme.init();
+
+    /* 커스텀 드롭다운 초기화 */
+    filterSelect = createCustomSelect({
+      btnId: 'category-filter-btn',
+      labelId: 'category-filter-label',
+      listId: 'category-filter-list',
+      wrapperId: 'category-filter-wrap',
+      placeholder: '전체 카테고리',
+    });
+    filterSelect.onChange(val => {
+      Search.setCategory(val);
+      refresh();
+    });
+
+    formCatSelect = createCustomSelect({
+      btnId: 'form-category-btn',
+      labelId: 'form-category-label',
+      listId: 'form-category-list',
+      wrapperId: 'form-category-wrap',
+      placeholder: '선택 없음',
+    });
+
     refreshCategories();
     refresh();
 
@@ -226,7 +237,6 @@ window.App = (() => {
 
     /* Search */
     searchInput.addEventListener('input', handleSearch);
-    categoryFilter.addEventListener('change', handleCategoryFilter);
 
     /* Backup */
     document.getElementById('btn-export').addEventListener('click', () => Backup.exportJSON());

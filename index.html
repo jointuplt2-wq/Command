@@ -63,9 +63,13 @@
             aria-label="검색"
           />
         </div>
-        <select id="category-filter" class="search-bar__select" aria-label="카테고리 필터">
-          <option value="">전체 카테고리</option>
-        </select>
+        <div class="custom-select" id="category-filter-wrap" aria-label="카테고리 필터">
+          <button type="button" class="custom-select__btn" id="category-filter-btn">
+            <span id="category-filter-label">전체 카테고리</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <ul class="custom-select__list" id="category-filter-list" hidden></ul>
+        </div>
       </div>
       <div class="search-info" id="search-info"></div>
     </div>
@@ -110,9 +114,13 @@
         <div class="form-group">
           <label class="form-label" for="form-category">카테고리</label>
           <div class="category-row">
-            <select id="form-category" class="form-input">
-              <option value="">선택 없음</option>
-            </select>
+            <div class="custom-select custom-select--form" id="form-category-wrap">
+              <button type="button" class="custom-select__btn" id="form-category-btn">
+                <span id="form-category-label">선택 없음</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <ul class="custom-select__list" id="form-category-list" hidden></ul>
+            </div>
             <button type="button" class="btn btn--ghost btn--sm" id="btn-add-category">+ 추가</button>
           </div>
         </div>
@@ -184,6 +192,7 @@
     }
   </script>
   <script src="js/storage.js?v=2"></script>
+  <script src="js/dropdown.js?v=2"></script>
   <script src="js/theme.js?v=2"></script>
   <script src="js/render.js?v=2"></script>
   <script src="js/search.js?v=2"></script>
