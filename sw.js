@@ -1,4 +1,4 @@
-const CACHE = 'glossary-v3';
+const CACHE = 'glossary-v4';
 const BASE = '/Command/';
 const ASSETS = [
   BASE,
@@ -7,17 +7,18 @@ const ASSETS = [
   BASE + 'favicon.svg',
   BASE + 'icon-192.png',
   BASE + 'icon-512.png',
-  BASE + 'css/reset.css?v=2',
-  BASE + 'css/tokens.css?v=2',
-  BASE + 'css/theme.css?v=2',
-  BASE + 'css/layout.css?v=2',
-  BASE + 'css/components.css?v=2',
-  BASE + 'js/storage.js?v=2',
-  BASE + 'js/theme.js?v=2',
-  BASE + 'js/render.js?v=2',
-  BASE + 'js/search.js?v=2',
-  BASE + 'js/backup.js?v=2',
-  BASE + 'js/main.js?v=2',
+  BASE + 'css/reset.css?v=3',
+  BASE + 'css/tokens.css?v=3',
+  BASE + 'css/theme.css?v=3',
+  BASE + 'css/layout.css?v=3',
+  BASE + 'css/components.css?v=3',
+  BASE + 'js/storage.js?v=3',
+  BASE + 'js/dropdown.js?v=3',
+  BASE + 'js/theme.js?v=3',
+  BASE + 'js/render.js?v=3',
+  BASE + 'js/search.js?v=3',
+  BASE + 'js/backup.js?v=3',
+  BASE + 'js/main.js?v=3',
 ];
 
 self.addEventListener('install', e => {
